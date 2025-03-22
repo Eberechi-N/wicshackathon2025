@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 interface Fruit {
   id: number;
@@ -23,16 +24,17 @@ function App() {
   //This is used to connect to the backend server
   const fetchAPI = async () => {
     try {
-    //This is where the server is hosted. This should probably not change. 
-    // but if u going to a set table add the name
-      const response = await axios.get<Fruit[]>("http://localhost:8080/api/fruits"); // 
+      //This is where the server is hosted. This should probably not change.
+      // but if u going to a set table add the name
+      const response = await axios.get<Fruit[]>(
+        "http://localhost:8080/api/fruits"
+      ); //
       setFruits(response.data); //Store database data in state
       console.log("Fetched fruits:", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   useEffect(() => {
     fetchAPI();
@@ -58,19 +60,18 @@ function App() {
         </p>
       </div>
 
-
-      <div>
+      <motion.div initial={{ scale: 1 }} whileHover={{ scale: 1.3 }}>
         {/* This is the fruit comment */}
         <h1>Fruit List</h1>
         <ul>
           {fruits.map((fruit) => (
-               <> 
-               {/* Render real database data  + how comment work-> use <> </> when inside map*/}
-               <li key={fruit.id}>{fruit.name}</li>
-             </>
+            <>
+              {/* Render real database data  + how comment work-> use <> </> when inside map*/}
+              <li key={fruit.id}>{fruit.name}</li>
+            </>
           ))}
         </ul>
-      </div>
+      </motion.div>
 
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
