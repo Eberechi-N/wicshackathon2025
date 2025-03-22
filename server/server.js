@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 app.get("/api/fruits", async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM fruits"); // Fetch from the DB
-        res.json(result.rows); // Send results as JSON
+        res.json(result.rows); // Send results as JSON to frontend
     } catch (error) {
         console.error("Error fetching fruits:", error);
         res.status(500).json({ error: "Internal Server Error" });

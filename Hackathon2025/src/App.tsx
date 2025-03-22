@@ -4,6 +4,11 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import axios from "axios";
 
+interface Fruit {
+  id: number;
+  name: string;
+}
+
 function App() {
   const [count, setCount] = useState(0);
 
@@ -12,19 +17,22 @@ function App() {
   //the "useState([])" says to initialize "array" to an empty array
   //Now, whenever setarray() is used, it will fill in "array" with an array as the argument
   //See below
-  const [array, setArray] = useState([]);
+  //same thing but with the db now
+  const [fruits, setFruits] = useState<Fruit[]>([]);
 
   //This is used to connect to the backend server
   const fetchAPI = async () => {
-    //This is where the server is hosted. This should probably not change.
-    const response = await axios.get("http://localhost:8080/api");
-
-    //setArray is declared in the useState above. We are using
-    //array from the server to fill in the array called "array"
-    //which is also declared above
-    setArray(response.data.fruits);
-    console.log(response.data.fruits);
+    try {
+    //This is where the server is hosted. This should probably not change. 
+    // but if u going to a set table add the name
+      const response = await axios.get<Fruit[]>("http://localhost:8080/api/fruits"); // 
+      setFruits(response.data); //Store database data in state
+      console.log("Fetched fruits:", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
 
   useEffect(() => {
     fetchAPI();
@@ -48,22 +56,22 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-        {
-          //we are basically looping through "array" and doing something with each element
-          //arrow functions are basically the same as writing out a function that doesn't need
-          //to exist 100% of the time. The first () have "fruits" which stands for the actual
-          //elements in the array. Index is used for if you need to keep track of which div has
-          //which fruit. It isnt important here (and i honestly never need to reference the div
-          //after the fact), but yeah. The arrow points to the block of code to be executed.
-          array.map((fruit, index) => (
-            //use {curly braces} to use arguments from the function
-            <div key={index}>
-              <p>{fruit}</p>
-              <br />
-            </div>
-          ))
-        }
       </div>
+
+
+      <div>
+        {/* This is the fruit comment */}
+        <h1>Fruit List</h1>
+        <ul>
+          {fruits.map((fruit) => (
+               <> 
+               {/* Render real database data  + how comment work-> use <> </> when inside map*/}
+               <li key={fruit.id}>{fruit.name}</li>
+             </>
+          ))}
+        </ul>
+      </div>
+
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
