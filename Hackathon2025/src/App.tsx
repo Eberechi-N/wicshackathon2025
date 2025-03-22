@@ -65,6 +65,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        {/* This is the radix comment */}
         <Dialog.Root>
         <Dialog.Trigger asChild>
           <button className="Button violet">Edit profile</button>
@@ -103,8 +104,8 @@ function App() {
         </Dialog.Portal>
       </Dialog.Root>
       </div>
-      //icons
-      <CircleUserRound />
+        {/* This is the icon comment */}
+        <CircleUserRound size={18}/>
 
       <motion.div initial={{ scale: 1 }} whileHover={{ scale: 1.3 }}>
         {/* This is the fruit comment */}
