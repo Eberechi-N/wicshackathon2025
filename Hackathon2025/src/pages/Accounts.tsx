@@ -2,7 +2,14 @@ import { useState } from "react";
 import { Plus, Trash, Edit } from "lucide-react";
 
 // Account types that can be selected
-const accountTypes = ["Cash", "Credit", "Debit", "Checking", "Investment", "Savings"];
+const accountTypes = [
+  "Cash",
+  "Credit",
+  "Debit",
+  "Checking",
+  "Investment",
+  "Savings",
+];
 
 // Tailwind classes; color-codes each account type
 const colorMap: Record<string, string> = {
@@ -22,7 +29,7 @@ interface Account {
   balance: number;
 }
 
-// State Management 
+// State Management
 export default function Accounts() {
   const [accounts, setAccounts] = useState<Account[]>([]); // Stores the list of user accounts
   const [editingAccountId, setEditingAccountId] = useState<number | null>(null); // Keeps track of the account being edited
@@ -32,7 +39,15 @@ export default function Accounts() {
   // Add a new account with a default type
   const addAccount = () => {
     const nextType = accountTypes[accounts.length % accountTypes.length];
-    setAccounts([...accounts,{ id: Date.now(), name: `Account ${accounts.length + 1}`, type: nextType, balance: 0 },]);
+    setAccounts([
+      ...accounts,
+      {
+        id: Date.now(),
+        name: `Account ${accounts.length + 1}`,
+        type: nextType,
+        balance: 0,
+      },
+    ]);
   };
 
   // Remove an account
@@ -54,13 +69,17 @@ export default function Accounts() {
     );
   };
 
-  // Handle balance and name change 
+  // Handle balance and name change
   const handleSave = (id: number) => {
     if (editedBalance === "" || isNaN(Number(editedBalance))) return; // Validates if value is a number (isNan) and not empty
     setAccounts((prev) =>
       prev.map((account) =>
         account.id === id
-          ? { ...account, balance: Number(editedBalance), name: editedName || account.name }
+          ? {
+              ...account,
+              balance: Number(editedBalance),
+              name: editedName || account.name,
+            }
           : account
       )
     );
@@ -70,8 +89,11 @@ export default function Accounts() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-300 p-10">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 relative">
+    <div className="grid grid-cols-10 grid-rows-6 h-screen">
+      {/* Sidebar space */}
+
+      {/* Main content area */}
+      <div className="col-span-8 col-start-3 row-span-6 p-6 bg-gray-100 overflow-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Accounts</h1>
 
         {/* List of accounts */}
@@ -83,7 +105,7 @@ export default function Accounts() {
               key={account.id}
               className="flex items-center justify-between bg-gray-50 border rounded-xl p-4 mb-3 hover:shadow-sm transition"
             >
-              {/* Account name — editable */}
+              {/* Account name */}
               <div className="flex flex-col space-x-4 mr-4 flex-1">
                 {editingAccountId === account.id ? (
                   <input
@@ -98,7 +120,7 @@ export default function Accounts() {
                 )}
               </div>
 
-              {/* Account type button — cycles types */}
+              {/* Account type */}
               <div className="flex items-center justify-center flex-1">
                 <button
                   onClick={() => cycleType(account.id)}
@@ -108,7 +130,7 @@ export default function Accounts() {
                 </button>
               </div>
 
-              {/* Balance — editable */}
+              {/* Balance */}
               <div className="flex items-center justify-center flex-1">
                 {editingAccountId === account.id ? (
                   <input
@@ -119,27 +141,29 @@ export default function Accounts() {
                     placeholder="Enter amount"
                   />
                 ) : (
-                  <span className="text-lg font-semibold">${account.balance}</span>
+                  <span className="text-lg font-semibold">
+                    ${account.balance}
+                  </span>
                 )}
               </div>
 
-              {/* Edit button — toggles between edit and save */}
+              {/* Edit button */}
               <div className="flex items-center justify-center">
                 <Edit
                   onClick={() => {
                     if (editingAccountId === account.id) {
-                      handleSave(account.id); // Save edits
+                      handleSave(account.id);
                     } else {
-                      setEditingAccountId(account.id); // Start editing
-                      setEditedBalance(account.balance); // Pre-fill balance
-                      setEditedName(account.name); // Pre-fill name
+                      setEditingAccountId(account.id);
+                      setEditedBalance(account.balance.toString());
+                      setEditedName(account.name);
                     }
                   }}
                   className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-700 mr-4"
                 />
               </div>
 
-              {/* Trash icon */}
+              {/* Delete button */}
               <div className="flex items-center justify-center">
                 <Trash
                   onClick={() => removeAccount(account.id)}
