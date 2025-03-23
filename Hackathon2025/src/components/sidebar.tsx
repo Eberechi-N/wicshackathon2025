@@ -11,6 +11,7 @@ export function Sidebar({ activeItem, onNavItemClick }: SidebarProps) {
   const navItems = [
     { id: "dashboard", label: "Home", icon: Home },
     { id: "income", label: "My Income", icon: DollarSign },
+    { id: "savings", label: "Savings", icon: DollarSign },
     { id: "accounts", label: "My Accounts", icon: CreditCard },
     { id: "settings", label: "Settings", icon: Settings },
   ]
