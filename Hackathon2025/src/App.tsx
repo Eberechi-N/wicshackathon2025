@@ -4,10 +4,11 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { CircleUserRound } from 'lucide-react';
+import { CircleUserRound } from "lucide-react";
 import { Dialog } from "radix-ui";
-
-
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 interface Fruit {
   id: number;
@@ -24,9 +25,6 @@ function App() {
   //See below
   //same thing but with the db now
   const [fruits, setFruits] = useState<Fruit[]>([]);
-
-
-
 
   //This is used to connect to the backend server
   const fetchAPI = async () => {
@@ -49,6 +47,12 @@ function App() {
 
   return (
     <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -66,46 +70,56 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
         <Dialog.Root>
-        <Dialog.Trigger asChild>
-          <button className="Button violet">Edit profile</button>
-        </Dialog.Trigger>
-        <Dialog.Portal>
-          <Dialog.Overlay className="DialogOverlay" />
-          <Dialog.Content className="DialogContent">
-            <Dialog.Title className="DialogTitle">Edit profile</Dialog.Title>
-            <Dialog.Description className="DialogDescription">
-              Make changes to your profile here. Click save when you're done.
-            </Dialog.Description>
-            <fieldset className="Fieldset">
-              <label className="Label" htmlFor="name">
-                Name
-              </label>
-              <input className="Input" id="name" defaultValue="Pedro Duarte" />
-            </fieldset>
-            <fieldset className="Fieldset">
-              <label className="Label" htmlFor="username">
-                Username
-              </label>
-              <input className="Input" id="username" defaultValue="@peduarte" />
-            </fieldset>
-            <div
-              style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}
-            >
+          <Dialog.Trigger asChild>
+            <button className="Button violet">Edit profile</button>
+          </Dialog.Trigger>
+          <Dialog.Portal>
+            <Dialog.Overlay className="DialogOverlay" />
+            <Dialog.Content className="DialogContent">
+              <Dialog.Title className="DialogTitle">Edit profile</Dialog.Title>
+              <Dialog.Description className="DialogDescription">
+                Make changes to your profile here. Click save when you're done.
+              </Dialog.Description>
+              <fieldset className="Fieldset">
+                <label className="Label" htmlFor="name">
+                  Name
+                </label>
+                <input
+                  className="Input"
+                  id="name"
+                  defaultValue="Pedro Duarte"
+                />
+              </fieldset>
+              <fieldset className="Fieldset">
+                <label className="Label" htmlFor="username">
+                  Username
+                </label>
+                <input
+                  className="Input"
+                  id="username"
+                  defaultValue="@peduarte"
+                />
+              </fieldset>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: 25,
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Dialog.Close asChild>
+                  <button className="Button green">Save changes</button>
+                </Dialog.Close>
+              </div>
               <Dialog.Close asChild>
-                <button className="Button green">Save changes</button>
+                <button className="IconButton" aria-label="Close"></button>
               </Dialog.Close>
-            </div>
-            <Dialog.Close asChild>
-              <button className="IconButton" aria-label="Close">
-              </button>
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
       </div>
       //icons
       <CircleUserRound />
-
       <motion.div initial={{ scale: 1 }} whileHover={{ scale: 1.3 }}>
         {/* This is the fruit comment */}
         <h1>Fruit List</h1>
@@ -118,7 +132,6 @@ function App() {
           ))}
         </ul>
       </motion.div>
-
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
