@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Trash, Edit } from "lucide-react";
+import { Sidebar } from "../components/sidebar";
 
 // Account types that can be selected
 const accountTypes = [
@@ -31,6 +32,9 @@ interface Account {
 
 // State Management
 export default function Accounts() {
+  const [activeView, setActiveView] = useState<
+    "home" | "income" | "expenses" | "savings" | "settings"
+  >("home");
   const [accounts, setAccounts] = useState<Account[]>([]); // Stores the list of user accounts
   const [editingAccountId, setEditingAccountId] = useState<number | null>(null); // Keeps track of the account being edited
   const [editedBalance, setEditedBalance] = useState<number | string>(""); // Holds the edited value for balance
@@ -88,8 +92,15 @@ export default function Accounts() {
     setEditedName(""); // Reset after saving
   };
 
+  const handleNavItemClick = (
+    view: "home" | "income" | "expenses" | "savings" | "settings"
+  ) => {
+    setActiveView(view);
+  };
+
   return (
     <div className="grid grid-cols-10 grid-rows-6 h-screen">
+      <Sidebar onNavItemClick={handleNavItemClick} activeItem={activeView} />
       {/* Sidebar space */}
 
       {/* Main content area */}
