@@ -1,4 +1,3 @@
-"use client"
 import { motion } from "framer-motion"
 import { Plus, ArrowRight, CreditCard, TrendingUp, ShoppingBag, Plane } from "lucide-react"
 import * as Progress from "@radix-ui/react-progress"

@@ -20,7 +20,7 @@ function App() {
         
         {/* Add routes for the sidebar navigation items */}
         <Route path="/income" element={<Dashboard />} />
-        <Route path="/expenses" element={<Dashboard />} />
+        <Route path="/accounts" element={<Dashboard />} />
         <Route path="/settings" element={<Dashboard />} />
         <Route path="/profile" element={<Dashboard />} />
       </Routes>

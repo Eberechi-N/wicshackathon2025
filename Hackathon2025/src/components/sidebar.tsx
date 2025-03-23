@@ -4,14 +4,14 @@ import { Home, BarChart2, CreditCard, DollarSign, Settings, User, PiggyBank, Log
 
 type SidebarProps = {
   activeItem: string
-  onNavItemClick: (item: "home" | "dashboard" | "income" | "expenses" | "savings" | "settings") => void
+  onNavItemClick: (item: "home" | "dashboard" | "income" | "accounts" | "savings" | "settings") => void
 }
 
 export function Sidebar({ activeItem, onNavItemClick }: SidebarProps) {
   const navItems = [
     { id: "dashboard", label: "Home", icon: Home },
     { id: "income", label: "My Income", icon: DollarSign },
-    { id: "expenses", label: "My Expense", icon: CreditCard },
+    { id: "accounts", label: "My Accounts", icon: CreditCard },
     { id: "settings", label: "Settings", icon: Settings },
   ]
 
@@ -52,11 +52,11 @@ export function Sidebar({ activeItem, onNavItemClick }: SidebarProps) {
                     item.id === "home" ||
                     item.id === "dashboard" ||
                     item.id === "income" ||
-                    item.id === "expenses" ||
+                    item.id === "accounts" ||
                     item.id === "savings" ||
                     item.id === "settings"
                   ) {
-                    onNavItemClick(item.id as "home" | "dashboard" | "income" | "expenses" | "savings" | "settings")
+                    onNavItemClick(item.id as "home" | "dashboard" | "income" | "accounts" | "savings" | "settings")
                   }
                 }}
               >

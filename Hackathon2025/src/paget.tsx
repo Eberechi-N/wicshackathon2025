@@ -10,6 +10,7 @@ import { SavingsPage } from "./components/savings-page"
 import { SettingsPage } from "./components/settings-page"
 import { DashboardPage } from "./components/dashboard"
 import { AddSavingsGoalModal } from "./components/add_savings_goal_modal"
+import AccountsPage from "./pages/Accounts"; // Create this component
 
 
 export type Income = {
@@ -58,7 +59,7 @@ export type Income = {
   }
   
   export default function Dashboard() {
-    const [activeView, setActiveView] = useState<"home" | "dashboard" | "income" | "expenses" | "savings" | "settings">(
+    const [activeView, setActiveView] = useState<"home" | "dashboard" | "income" | "accounts" | "savings" | "settings">(
       "dashboard",
     )
     const [showIncomeModal, setShowIncomeModal] = useState(false)
@@ -421,7 +422,7 @@ export type Income = {
       }
     }
   
-    const handleNavItemClick = (view: "home" | "dashboard" | "income" | "expenses" | "savings" | "settings") => {
+    const handleNavItemClick = (view: "home" | "dashboard" | "income" | "accounts" | "savings" | "settings") => {
       setActiveView(view)
     }
   
