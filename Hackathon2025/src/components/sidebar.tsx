@@ -1,6 +1,6 @@
 import type React from "react"
 
-import { Home, BarChart2, CreditCard, DollarSign, Settings, User, PiggyBank, LogOut, Package } from "lucide-react"
+import { Home, BadgeDollarSign , BarChart2, CreditCard, DollarSign, Settings, User, PiggyBank, LogOut, Package } from "lucide-react"
 
 type SidebarProps = {
   activeItem: string
@@ -10,9 +10,9 @@ type SidebarProps = {
 export function Sidebar({ activeItem, onNavItemClick }: SidebarProps) {
   const navItems = [
     { id: "dashboard", label: "Home", icon: Home },
-    { id: "income", label: "My Income", icon: DollarSign },
-    { id: "savings", label: "Savings", icon: DollarSign },
-    { id: "accounts", label: "My Accounts", icon: CreditCard },
+    { id: "income", label: "Transcations", icon: DollarSign },
+    { id: "savings", label: "Savings", icon: BadgeDollarSign },
+    { id: "accounts", label: "My Accounts", icon: CreditCard, path: "/accounts" },
     { id: "settings", label: "Settings", icon: Settings },
   ]
 

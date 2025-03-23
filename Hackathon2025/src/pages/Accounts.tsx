@@ -33,8 +33,8 @@ interface Account {
 // State Management
 export default function Accounts() {
   const [activeView, setActiveView] = useState<
-    "home" | "income" | "expenses" | "savings" | "settings"
-  >("home");
+  "home" | "income" | "expenses" | "savings" | "settings" | "accounts" | "dashboard"
+>("accounts");
   const [accounts, setAccounts] = useState<Account[]>([]); // Stores the list of user accounts
   const [editingAccountId, setEditingAccountId] = useState<number | null>(null); // Keeps track of the account being edited
   const [editedBalance, setEditedBalance] = useState<number | string>(""); // Holds the edited value for balance
@@ -93,24 +93,19 @@ export default function Accounts() {
   };
 
   const handleNavItemClick = (
-    view: "home" | "income" | "expenses" | "savings" | "settings"
+    view: "home" | "dashboard" | "income" | "accounts" | "savings" | "settings"
   ) => {
     setActiveView(view);
   };
 
   return (
-    <div className="grid grid-cols-10 grid-rows-6 h-screen">
-      <Sidebar onNavItemClick={handleNavItemClick} activeItem={activeView} />
-      {/* Sidebar space */}
+    <div className="h-screen p-6 bg-gray-100 overflow-auto">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Accounts</h1>
 
-      {/* Main content area */}
-      <div className="col-span-8 col-start-3 row-span-6 p-6 bg-gray-100 overflow-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Accounts</h1>
-
-        {/* List of accounts */}
-        {accounts.length === 0 ? (
-          <p>No accounts found</p>
-        ) : (
+      {/* List of accounts */}
+      {accounts.length === 0 ? (
+        <p>No accounts found</p>
+      )  : (
           accounts.map((account) => (
             <div
               key={account.id}
@@ -193,6 +188,5 @@ export default function Accounts() {
           <Plus className="w-6 h-6" />
         </button>
       </div>
-    </div>
   );
 }

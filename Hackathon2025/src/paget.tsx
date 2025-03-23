@@ -135,7 +135,7 @@ export type Income = {
       },
       {
         id: 4,
-        name: "Nagad Bangladesh",
+        name: "Cleveland B",
         category: "Shopping",
         date: "2025-03-01",
         amount: 250,
@@ -144,7 +144,7 @@ export type Income = {
       },
       {
         id: 5,
-        name: "Pathao Bangladesh",
+        name: "Adam B",
         category: "Transportation",
         date: "2025-02-28",
         amount: 19.5,
@@ -437,6 +437,9 @@ export type Income = {
               expenseData={expenseData}
               savingsGoals={savingsGoals}
               onAddGoal={() => setShowAddGoalModal(true)}
+            />
+          ) : activeView === "accounts" ? (
+            <AccountsPage
             />
           ) : activeView === "savings" ? (
             <SavingsPage
