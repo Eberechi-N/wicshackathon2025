@@ -30,12 +30,25 @@ function Signup() {
         password,
         username,
       });
+
+      
+        // Store token in localStorage
+        if (response.data.token) {
+          localStorage.setItem("supabase_token", response.data.token);
+          console.log("Token saved:", response.data.token);
+      } else {
+          console.error("No token received");
+      }
+
       alert(response.data.message);
+      console.log("Token Retrieved After Signup:", localStorage.getItem("supabase_token"));
       navigate("/userdash");
     } catch (error: any) {
       alert(error.response?.data?.error || "Signup failed.");
     }
   }
+
+  
 
   return (
     <div className="min-h-screen bg-gray-300 grid grid-cols-6 grid-rows-6">
