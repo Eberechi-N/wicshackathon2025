@@ -5,6 +5,11 @@ import {
   Plus,
   Minus,
   CreditCard,
+  Hash,
+  Gamepad2,
+  Receipt,
+  TreePalm,
+  PartyPopper,
 } from "lucide-react";
 import { Separator } from "radix-ui";
 import { motion } from "framer-motion";
@@ -30,6 +35,31 @@ function Dashboard() {
       type: "Income",
     },
   ];
+
+  var accounts: any = [
+    {
+      name: "Checking",
+      account: "****-2353",
+      money: "351.67",
+      logo: "add",
+      type: "Debit",
+    },
+    {
+      name: "Savings",
+      account: "****-9045",
+      money: "1864.53",
+      logo: "add",
+      type: "Credit",
+    },
+  ];
+
+  var goals = [
+    { name: "Xbox", price: "499.99", logo: "game" },
+    { name: "Birthday", price: "300.00", logo: "party" },
+    { name: "Vacation", price: "6500.00", logo: "trip" },
+    { name: "Bills", price: "324.62", logo: "bill" },
+  ];
+
   return (
     <>
       <div className="grid grid-cols-10 grid-rows-6 gap-4 h-[100vh] w-[100vw] p-10">
@@ -123,23 +153,89 @@ function Dashboard() {
         {/*Accounts*/}
         <motion.div
           whileHover={{ scale: 1.02 }}
-          className="col-span-5 row-span-2 col-start-6 row-start-1 bg-neutral-100 rounded-2xl px-3"
+          className="col-span-5 row-span-2 col-start-6 row-start-1 bg-neutral-100 rounded-2xl px-4"
         >
           <h1 className="font-semibold text-4xl p-4 text-center text-neutral-800">
             Accounts
           </h1>
+          <div className="flex flex-col gap-4">
+            {accounts.map((account: any, index: any) => (
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                key={index}
+                className="grid grid-cols-4 grid-rows-1 pl-4 bg-neutral-200 rounded-3xl p-2"
+              >
+                <div className="flex justify-start items-center  col-span-2">
+                  <CreditCard
+                    size={70}
+                    strokeWidth={2.5}
+                    color={transactionIconColors}
+                  />
+                  <div className=" justify-start my-auto pl-4">
+                    <h1 className="text-3xl font-[550]">{account.name}</h1>
+                    <h1 className="text-xl font-[450]">{account.type}</h1>
+                  </div>
+                </div>
+
+                <div className="flex justify-start my-auto gap-5">
+                  <Hash
+                    size={35}
+                    strokeWidth={2.5}
+                    color={transactionIconColors}
+                  />
+                  <h1 className="text-xl font-[550]">{account.account}</h1>
+                </div>
+                <div className="my-auto flex justify-end pr-5 pb-2">
+                  {account.logo == "add" ? (
+                    <h1 className="text-xl font-[550] my-auto text-lime-700">
+                      ${account.money}
+                    </h1>
+                  ) : (
+                    <h1 className="text-xl font-[550] my-auto text-red-800">
+                      -${account.money}
+                    </h1>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
         <motion.div
           whileHover={{ scale: 1.02 }}
-          className="col-span-5 row-span-2 col-start-6 row-start-3 bg-neutral-100 rounded-2xl"
+          className="col-span-5 row-span-2 col-start-6 row-start-3 bg-neutral-100 rounded-2xl px-4"
         >
           <h1 className="font-semibold text-5xl p-4  text-neutral-800">
             Goals
           </h1>
+          <div className="flex gap-4">
+            {goals.map((goal: any, index: any) => (
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                key={index}
+                className="pl-4 bg-neutral-200 rounded-3xl p-2"
+              >
+                <div className="flex justify-start items-start flex-col">
+                  {goal.logo == "party" ? (
+                    <PartyPopper size={50} />
+                  ) : goal.logo == "trip" ? (
+                    <TreePalm size={50}/>
+                  ) : goal.logo == "bill" ? (
+                    <Receipt size={50}/>
+                  ) : goal.logo == "game" ? (
+                    <Gamepad2 size={50}/>
+                  ) : null}
+
+        
+                  <h1 className="text-3xl font-[600]">{goal.name}</h1>
+                  <h1 className="text-2xl font-[450]">{goal.name}</h1>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
         <motion.div
           whileHover={{ scale: 1.02 }}
-          className="col-span-5 row-span-2 col-start-6 row-start-5 bg-neutral-100 rounded-2xl"
+          className="col-span-5 px-4 row-span-2 col-start-6 row-start-5 bg-neutral-100 rounded-2xl"
         >
           <h1 className="font-semibold text-4xl p-4 text-center text-neutral-800">
             Recent Transactions
@@ -150,7 +246,7 @@ function Dashboard() {
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 key={index}
-                className="grid grid-cols-4 grid-rows-1 gap-4 bg-neutral-200 rounded-3xl p-2"
+                className="grid grid-cols-4 grid-rows-1 pl-4 gap-4 bg-neutral-200 rounded-3xl p-2"
               >
                 <div className="flex justify-start items-center col-span-2">
                   {transaction.logo == "add" ? (
