@@ -8,6 +8,8 @@ import { EditIncomeModal } from "./components/edit_income_modal";
 import { EditExpenseModal } from "./components/edit_expense_modal";
 import { SavingsPage } from "./components/savings-page"
 import { SettingsPage } from "./components/settings-page"
+import { DashboardPage } from "./components/dashboard"
+import { AddSavingsGoalModal } from "./components/add_savings_goal_modal"
 
 
 export type Income = {
@@ -56,9 +58,12 @@ export type Income = {
   }
   
   export default function Dashboard() {
-    const [activeView, setActiveView] = useState<"home" | "income" | "expenses" | "savings" | "settings">("home")
+    const [activeView, setActiveView] = useState<"home" | "dashboard" | "income" | "expenses" | "savings" | "settings">(
+      "dashboard",
+    )
     const [showIncomeModal, setShowIncomeModal] = useState(false)
     const [showExpenseModal, setShowExpenseModal] = useState(false)
+    const [showAddGoalModal, setShowAddGoalModal] = useState(false)
     const [editingIncome, setEditingIncome] = useState<Income | null>(null)
     const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
   
@@ -102,10 +107,10 @@ export type Income = {
     const [expenseData, setExpenseData] = useState<Expense[]>([
       {
         id: 1,
-        name: "Groceries",
+        name: "Starbucks Coffee",
         category: "Food",
         date: "2025-03-18",
-        amount: 150,
+        amount: 75.67,
         accountName: "Credit Card",
         emoji: "🛒",
       },
@@ -129,19 +134,19 @@ export type Income = {
       },
       {
         id: 4,
-        name: "Rent",
-        category: "Housing",
+        name: "Nagad Bangladesh",
+        category: "Shopping",
         date: "2025-03-01",
-        amount: 1200,
+        amount: 250,
         accountName: "Main Account",
         emoji: "🏠",
       },
       {
         id: 5,
-        name: "Gym Membership",
-        category: "Health",
+        name: "Pathao Bangladesh",
+        category: "Transportation",
         date: "2025-02-28",
-        amount: 50,
+        amount: 19.5,
         accountName: "Credit Card",
         emoji: "💪",
       },
@@ -151,40 +156,40 @@ export type Income = {
     const [savingsGoals, setSavingsGoals] = useState<SavingsGoal[]>([
       {
         id: 1,
-        name: "Emergency Fund",
-        targetAmount: 10000,
-        currentAmount: 5000,
-        category: "Emergency",
+        name: "Holiday trip",
+        targetAmount: 655,
+        currentAmount: 300,
+        category: "Travel",
         dueDate: "2025-12-31",
         accountName: "Savings Account",
         status: "active",
       },
       {
         id: 2,
-        name: "Vacation to Japan",
-        targetAmount: 3000,
-        currentAmount: 1500,
-        category: "Travel",
+        name: "Renovation",
+        targetAmount: 235,
+        currentAmount: 100,
+        category: "Housing",
         dueDate: "2025-06-15",
         accountName: "Savings Account",
         status: "active",
       },
       {
         id: 3,
-        name: "New Laptop",
-        targetAmount: 1500,
-        currentAmount: 1500,
+        name: "Xbox",
+        targetAmount: 854,
+        currentAmount: 400,
         category: "Electronics",
         dueDate: "2025-02-01",
         accountName: "Main Account",
-        status: "completed",
+        status: "active",
       },
       {
         id: 4,
-        name: "Car Down Payment",
-        targetAmount: 5000,
-        currentAmount: 500,
-        category: "Transportation",
+        name: "Birthday",
+        targetAmount: 495,
+        currentAmount: 200,
+        category: "Entertainment",
         dueDate: "2026-01-15",
         accountName: "Savings Account",
         status: "active",
@@ -338,6 +343,7 @@ export type Income = {
     const handleAddSavingsGoal = (newGoal: Omit<SavingsGoal, "id">) => {
       const newId = Math.max(0, ...savingsGoals.map((goal) => goal.id)) + 1
       setSavingsGoals((prev) => [...prev, { ...newGoal, id: newId }])
+      setShowAddGoalModal(false)
     }
   
     const handleUpdateSavingsGoal = (updatedGoal: SavingsGoal) => {
@@ -415,7 +421,7 @@ export type Income = {
       }
     }
   
-    const handleNavItemClick = (view: "home" | "income" | "expenses" | "savings" | "settings") => {
+    const handleNavItemClick = (view: "home" | "dashboard" | "income" | "expenses" | "savings" | "settings") => {
       setActiveView(view)
     }
   
@@ -424,7 +430,14 @@ export type Income = {
         <Sidebar onNavItemClick={handleNavItemClick} activeItem={activeView} />
   
         <div className="col-span-8 col-start-3 row-span-6 p-6 bg-gray-50 overflow-auto">
-          {activeView === "savings" ? (
+          {activeView === "dashboard" ? (
+            <DashboardPage
+              incomeData={incomeData}
+              expenseData={expenseData}
+              savingsGoals={savingsGoals}
+              onAddGoal={() => setShowAddGoalModal(true)}
+            />
+          ) : activeView === "savings" ? (
             <SavingsPage
               savingsGoals={savingsGoals}
               savingsTransactions={savingsTransactions}
@@ -473,6 +486,10 @@ export type Income = {
             onSave={handleAddExpense}
             categories={expenseCategories}
           />
+        )}
+  
+        {showAddGoalModal && (
+          <AddSavingsGoalModal onClose={() => setShowAddGoalModal(false)} onSave={handleAddSavingsGoal} />
         )}
   
         {editingIncome && (
