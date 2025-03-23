@@ -1,41 +1,64 @@
 const express = require("express");
 const router = express.Router();
-const authenticateUser = require("../middleware/auth");
 const pool = require("../database"); // Database connection
 
 // Fetch all income for the logged-in user
-router.get("/", authenticateUser, async (req, res) => {
-
+router.get("/", async (req, res) => {
     try {
-        const result = await pool.query("SELECT * FROM income WHERE user_id = $1", [req.user.id]);
+        const result = await pool.query(
+            "SELECT id, name, amount, category, account_name FROM income WHERE user_id = $1",
+            [req.user.id]
+        );
         res.json(result.rows);
     } catch (error) {
-        console.error("Error fetching income:", error);
+        console.error("🚨 Error fetching income:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
-//Insert new income
-router.post("/", authenticateUser, async (req, res) => {
-
-    const { name, amount, account_id, category } = req.body;
+// Fetch all accounts for user (for the dropdown)
+router.get("/accounts", async (req, res) => {
     try {
         const result = await pool.query(
-            "INSERT INTO income (user_id, name, amount, account_id, category) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-            [req.user.id, name, amount, account_id, category]
+            "SELECT name FROM accounts WHERE user_id = $1",
+            [req.user.id]
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error("🚨 Error fetching accounts:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// Insert new income (with account_name)
+router.post("/", async (req, res) => {
+    const { name, amount, account_name, category } = req.body;
+
+    if (!name || !amount || !account_name || !category) {
+        return res.status(400).json({ error: "Missing required fields (name, amount, account_name, category)" });
+    }
+
+    try {
+        const result = await pool.query(
+            "INSERT INTO income (user_id, name, amount, account_name, category) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            [req.user.id, name, amount, account_name, category]
         );
         res.json(result.rows[0]);
     } catch (error) {
-        console.error("Error adding income:", error);
+        console.error("🚨 Error adding income:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
-//Update income entry
-router.put("/:id", authenticateUser, async (req, res) => {
 
+// Update income entry
+router.put("/:id", async (req, res) => {
     const { id } = req.params;
     const { name, amount, account_id, category } = req.body;
+
+    if (!req.user?.id) {
+        return res.status(401).json({ error: "Unauthorized: No user ID found" });
+    }
 
     try {
         const result = await pool.query(
@@ -55,10 +78,12 @@ router.put("/:id", authenticateUser, async (req, res) => {
 });
 
 // Delete income entry
-// router.delete("/:id", authenticateUser, async (req, res) => {
-    router.delete("/:id", async (req, res) => {
-
+router.delete("/:id", async (req, res) => {
     const { id } = req.params;
+
+    if (!req.user?.id) {
+        return res.status(401).json({ error: "Unauthorized: No user ID found" });
+    }
 
     try {
         const result = await pool.query(
@@ -76,6 +101,5 @@ router.put("/:id", authenticateUser, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 module.exports = router;

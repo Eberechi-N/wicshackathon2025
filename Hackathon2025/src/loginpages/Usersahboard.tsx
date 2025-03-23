@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Logout from "../components/logout";
 
 interface User {
     id: string;
@@ -17,5 +18,9 @@ interface User {
   
     if (!user) return <p>You must be logged in to view this page.</p>;
   
-    return <h1>Welcome, {user.email}!</h1>;
+    return  (  <nav className="flex justify-between p-4 bg-gray-800 text-white">
+                <h1>Welcome, {user.email}!</h1>  
+                <Logout />
+                </nav>
+    );
   }

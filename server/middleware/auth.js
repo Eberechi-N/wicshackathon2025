@@ -3,17 +3,19 @@ const { createClient } = require("@supabase/supabase-js");
 // Initialize Supabase client
 const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 const authenticateUser = async (req, res, next) => {
-    const token = req.headers.authorization?.split(" ")[1]; // Extract token
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
-        return res.status(401).json({ error: "Unauthorized: No token provided" });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "Missing or invalid Bearer token" });
     }
 
-    const { data, error } = await supabase.auth.getUser({ access_token: token });
+    const token = authHeader.split(" ")[1];
+
+    const { data, error } = await supabase.auth.getUser(token);
 
     if (error || !data?.user) {
         console.error("Supabase Auth Error:", error.message);
