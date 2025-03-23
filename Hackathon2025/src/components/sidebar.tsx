@@ -1,32 +1,20 @@
-import { ArrowLeftRight, DollarSign, CreditCard, Settings, User } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
 
-// Define the props interface
-interface SidebarProps {
-  // Optional current path prop in case we're not using Router
-  currentPath?: string;
+import { Home, DollarSign, CreditCard, Settings, User, PiggyBank } from "lucide-react"
+
+type SidebarProps = {
+  activeItem: string
+  onNavItemClick: (item: "home" | "income" | "expenses" | "savings" | "settings") => void
 }
 
-export function Sidebar({ currentPath }: SidebarProps) {
-  const [activeItem, setActiveItem] = useState("home");
-  
+export function Sidebar({ activeItem, onNavItemClick }: SidebarProps) {
   const navItems = [
-    { id: "transactions", label: "Transactions", icon: ArrowLeftRight, to: "/transactions" },
-    { id: "income", label: "Income", icon: DollarSign, to: "/income" },
-    { id: "expenses", label: "Expenses", icon: CreditCard, to: "/expenses" },
-    { id: "settings", label: "Settings", icon: Settings, to: "/settings" },
-    { id: "profile", label: "Profile", icon: User, to: "/profile" },
-  ];
-  
-  // If we have a currentPath, find the corresponding item and set it as active
-  if (currentPath) {
-    const activeNav = navItems.find((item) => item.to === currentPath);
-    if (activeNav && activeItem !== activeNav.id) {
-      // This will run once when the component mounts
-      setTimeout(() => setActiveItem(activeNav.id), 0);
-    }
-  }
+    { id: "home", label: "Home", icon: Home },
+    { id: "income", label: "Income", icon: DollarSign },
+    { id: "expenses", label: "Expenses", icon: CreditCard },
+    { id: "savings", label: "Savings", icon: PiggyBank },
+    { id: "settings", label: "Settings", icon: Settings },
+    { id: "profile", label: "Profile", icon: User },
+  ]
 
   return (
     <div className="col-span-2 row-span-6 bg-black text-white flex flex-col">
@@ -38,18 +26,25 @@ export function Sidebar({ currentPath }: SidebarProps) {
         <ul className="space-y-2">
           {navItems.map((item) => (
             <li key={item.id}>
-              <Link
-                to={item.to}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
-                  activeItem === item.id
-                    ? "bg-gray-800 text-white"
-                    : "text-gray-400 hover:text-white hover:bg-gray-800"
+              <button
+                className={`flex w-full items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                  activeItem === item.id ? "bg-gray-800 text-white" : "text-gray-400 hover:text-white hover:bg-gray-800"
                 }`}
-                onClick={() => setActiveItem(item.id)}
+                onClick={() => {
+                  if (
+                    item.id === "home" ||
+                    item.id === "income" ||
+                    item.id === "expenses" ||
+                    item.id === "savings" ||
+                    item.id === "settings"
+                  ) {
+                    onNavItemClick(item.id as "home" | "income" | "expenses" | "savings" | "settings")
+                  }
+                }}
               >
-                {item.icon && <item.icon className="h-5 w-5" />}
+                <item.icon className="h-5 w-5" />
                 <span>{item.label}</span>
-              </Link>
+              </button>
             </li>
           ))}
         </ul>
@@ -65,5 +60,6 @@ export function Sidebar({ currentPath }: SidebarProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
+

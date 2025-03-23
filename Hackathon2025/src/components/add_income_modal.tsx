@@ -7,14 +7,15 @@ import * as Dialog from "@radix-ui/react-dialog"
 import * as Label from "@radix-ui/react-label"
 import * as Select from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons"
-import type { Income } from "../paget"
+import type { Income, Category } from "../paget"
 
 type AddIncomeModalProps = {
   onClose: () => void
   onSave: (data: Omit<Income, "id">) => void
+  categories: Category[]
 }
 
-export function AddIncomeModal({ onClose, onSave }: AddIncomeModalProps) {
+export function AddIncomeModal({ onClose, onSave, categories }: AddIncomeModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -114,13 +115,19 @@ export function AddIncomeModal({ onClose, onSave }: AddIncomeModalProps) {
 
                         <Select.Viewport className="p-1">
                           <Select.Group>
-                            {["Employment", "Business", "Investment", "Side Hustle", "Other"].map((category) => (
+                            {categories.map((category) => (
                               <Select.Item
-                                key={category}
-                                value={category}
+                                key={category.id}
+                                value={category.name}
                                 className="relative flex items-center px-8 py-2 text-sm rounded-md cursor-default select-none hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[state=checked]:bg-blue-50"
                               >
-                                <Select.ItemText>{category}</Select.ItemText>
+                                <div className="flex items-center gap-2">
+                                  <div
+                                    className="w-3 h-3 rounded-full"
+                                    style={{ backgroundColor: category.color }}
+                                  ></div>
+                                  <Select.ItemText>{category.name}</Select.ItemText>
+                                </div>
                                 <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
                                   <CheckIcon />
                                 </Select.ItemIndicator>

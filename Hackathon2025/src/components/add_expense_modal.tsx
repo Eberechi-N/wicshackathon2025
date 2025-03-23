@@ -7,14 +7,16 @@ import * as Dialog from "@radix-ui/react-dialog"
 import * as Label from "@radix-ui/react-label"
 import * as Select from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons"
-import type { Expense } from "../paget"
+import type { Expense, Category } from "../paget"
+
 
 type AddExpenseModalProps = {
   onClose: () => void
   onSave: (data: Omit<Expense, "id">) => void
+  categories: Category[]
 }
 
-export function AddExpenseModal({ onClose, onSave }: AddExpenseModalProps) {
+export function AddExpenseModal({ onClose, onSave, categories }: AddExpenseModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -117,22 +119,19 @@ export function AddExpenseModal({ onClose, onSave }: AddExpenseModalProps) {
 
                         <Select.Viewport className="p-1">
                           <Select.Group>
-                            {[
-                              "Food",
-                              "Housing",
-                              "Transportation",
-                              "Utilities",
-                              "Entertainment",
-                              "Healthcare",
-                              "Shopping",
-                              "Other",
-                            ].map((category) => (
+                            {categories.map((category) => (
                               <Select.Item
-                                key={category}
-                                value={category}
+                                key={category.id}
+                                value={category.name}
                                 className="relative flex items-center px-8 py-2 text-sm rounded-md cursor-default select-none hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[state=checked]:bg-blue-50"
                               >
-                                <Select.ItemText>{category}</Select.ItemText>
+                                <div className="flex items-center gap-2">
+                                  <div
+                                    className="w-3 h-3 rounded-full"
+                                    style={{ backgroundColor: category.color }}
+                                  ></div>
+                                  <Select.ItemText>{category.name}</Select.ItemText>
+                                </div>
                                 <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
                                   <CheckIcon />
                                 </Select.ItemIndicator>

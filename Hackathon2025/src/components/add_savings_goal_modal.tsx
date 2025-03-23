@@ -1,41 +1,30 @@
-import type React from "react"
+"use client"
 
-import { useState, useEffect } from "react"
+import type React from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { X } from "lucide-react"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as Label from "@radix-ui/react-label"
 import * as Select from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons"
-import type { Income, Category } from "../paget"
+import type { SavingsGoal } from "../paget"
 
-type EditIncomeModalProps = {
-  income: Income
+type AddSavingsGoalModalProps = {
   onClose: () => void
-  onSave: (data: Income) => void
-  categories: Category[]
+  onSave: (data: Omit<SavingsGoal, "id">) => void
 }
 
-export function EditIncomeModal({ income, onClose, onSave, categories }: EditIncomeModalProps) {
+export function AddSavingsGoalModal({ onClose, onSave }: AddSavingsGoalModalProps) {
   const [formData, setFormData] = useState({
-    id: income.id,
-    name: income.name,
-    category: income.category,
-    date: income.date,
-    amount: income.amount.toString(),
-    accountName: income.accountName,
+    name: "",
+    targetAmount: "",
+    currentAmount: "",
+    category: "",
+    dueDate: "",
+    accountName: "",
+    status: "active",
   })
-
-  useEffect(() => {
-    setFormData({
-      id: income.id,
-      name: income.name,
-      category: income.category,
-      date: income.date,
-      amount: income.amount.toString(),
-      accountName: income.accountName,
-    })
-  }, [income])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -49,10 +38,12 @@ export function EditIncomeModal({ income, onClose, onSave, categories }: EditInc
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    console.log("Submitting income edit form:", formData)
+
     onSave({
       ...formData,
-      amount: Number.parseFloat(formData.amount),
+      targetAmount: Number.parseFloat(formData.targetAmount),
+      currentAmount: Number.parseFloat(formData.currentAmount),
+      status: formData.status as "active" | "completed" | "canceled",
     })
   }
 
@@ -71,7 +62,7 @@ export function EditIncomeModal({ income, onClose, onSave, categories }: EditInc
           >
             <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between p-4 border-b">
-                <Dialog.Title className="text-xl font-semibold">Edit Income</Dialog.Title>
+                <Dialog.Title className="text-xl font-semibold">Add New Savings Goal</Dialog.Title>
                 <Dialog.Close asChild>
                   <button className="h-8 w-8 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100">
                     <X className="h-4 w-4" />
@@ -82,14 +73,14 @@ export function EditIncomeModal({ income, onClose, onSave, categories }: EditInc
               <form onSubmit={handleSubmit} className="p-4 space-y-4" onClick={(e) => e.stopPropagation()}>
                 <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
                   <Label.Root htmlFor="name" className="block text-sm font-medium text-gray-700">
-                    Name
+                    Goal Name
                   </Label.Root>
                   <input
                     id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Income name"
+                    placeholder="e.g. Emergency Fund"
                     className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                     onClick={(e) => e.stopPropagation()}
@@ -128,19 +119,22 @@ export function EditIncomeModal({ income, onClose, onSave, categories }: EditInc
 
                         <Select.Viewport className="p-1">
                           <Select.Group>
-                            {categories.map((category) => (
+                            {[
+                              "Emergency",
+                              "Travel",
+                              "Housing",
+                              "Transportation",
+                              "Electronics",
+                              "Education",
+                              "Retirement",
+                              "Other",
+                            ].map((category) => (
                               <Select.Item
-                                key={category.id}
-                                value={category.name}
+                                key={category}
+                                value={category}
                                 className="relative flex items-center px-8 py-2 text-sm rounded-md cursor-default select-none hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[state=checked]:bg-blue-50"
                               >
-                                <div className="flex items-center gap-2">
-                                  <div
-                                    className="w-3 h-3 rounded-full"
-                                    style={{ backgroundColor: category.color }}
-                                  ></div>
-                                  <Select.ItemText>{category.name}</Select.ItemText>
-                                </div>
+                                <Select.ItemText>{category}</Select.ItemText>
                                 <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
                                   <CheckIcon />
                                 </Select.ItemIndicator>
@@ -158,15 +152,18 @@ export function EditIncomeModal({ income, onClose, onSave, categories }: EditInc
                 </div>
 
                 <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
-                  <Label.Root htmlFor="date" className="block text-sm font-medium text-gray-700">
-                    Date
+                  <Label.Root htmlFor="targetAmount" className="block text-sm font-medium text-gray-700">
+                    Target Amount
                   </Label.Root>
                   <input
-                    id="date"
-                    name="date"
-                    type="date"
-                    value={formData.date}
+                    id="targetAmount"
+                    name="targetAmount"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.targetAmount}
                     onChange={handleChange}
+                    placeholder="0.00"
                     className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                     onClick={(e) => e.stopPropagation()}
@@ -174,20 +171,35 @@ export function EditIncomeModal({ income, onClose, onSave, categories }: EditInc
                 </div>
 
                 <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
-                  <Label.Root htmlFor="amount" className="block text-sm font-medium text-gray-700">
-                    Amount
+                  <Label.Root htmlFor="currentAmount" className="block text-sm font-medium text-gray-700">
+                    Current Amount
                   </Label.Root>
                   <input
-                    id="amount"
-                    name="amount"
+                    id="currentAmount"
+                    name="currentAmount"
                     type="number"
                     step="0.01"
                     min="0"
-                    value={formData.amount}
+                    value={formData.currentAmount}
                     onChange={handleChange}
                     placeholder="0.00"
                     className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+
+                <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
+                  <Label.Root htmlFor="dueDate" className="block text-sm font-medium text-gray-700">
+                    Due Date (Optional)
+                  </Label.Root>
+                  <input
+                    id="dueDate"
+                    name="dueDate"
+                    type="date"
+                    value={formData.dueDate}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     onClick={(e) => e.stopPropagation()}
                   />
                 </div>
@@ -224,7 +236,7 @@ export function EditIncomeModal({ income, onClose, onSave, categories }: EditInc
 
                         <Select.Viewport className="p-1">
                           <Select.Group>
-                            {["Main Account", "Savings Account", "Business Account", "Investment Account"].map(
+                            {["Main Account", "Savings Account", "Investment Account", "Business Account"].map(
                               (account) => (
                                 <Select.Item
                                   key={account}
