@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { createClient } = require("@supabase/supabase-js"); 
 const app = express();
@@ -5,19 +6,24 @@ const app = express();
 const cors = require("cors");
 const pool = require("./database"); // Import the database connection
 //need this for auth database speficially
-require("dotenv").config();
 
 const corsOptions = {
     origin: ["http://localhost:5173"],
+    credentials: true
 }
-
-app.use(express.json()); 
-app.use(cors(corsOptions));
 //key for auth
 const supabase = createClient(
     process.env.SUPABASE_URL, 
     process.env.SUPABASE_ANON_KEY
 );
+
+const incomeRoutes = require("./routes/income_routes"); 
+const expenseRoutes = require("./routes/expense_routes");
+
+app.use(express.json()); 
+app.use(cors(corsOptions));
+app.use("/api/income", incomeRoutes); // Register income routes
+app.use("/api/expenses", expenseRoutes); // Register expense routes
 
 //signup route
 app.post("/signup", async (req, res) => {
@@ -90,8 +96,6 @@ app.get("/api/fruits", async (req, res) => {
     }
 });
 
-app.post("/")
-
 //where u can insert data
 app.post("/api/fruits", async (req, res) => {
     const { name } = req.body;
@@ -106,6 +110,11 @@ app.post("/api/fruits", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+
+
+
 
 
 app.listen(8080, () => {
