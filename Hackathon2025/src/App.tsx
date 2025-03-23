@@ -6,7 +6,10 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { CircleUserRound } from 'lucide-react';
 import { Dialog } from "radix-ui";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignupForm from "./loginpages/signup_form";
+import LoginForm from "./loginpages/loginform";
+import Dashboard from "./loginpages/Usersahboard";
 
 
 interface Fruit {
@@ -15,6 +18,7 @@ interface Fruit {
 }
 
 function App() {
+
   const [count, setCount] = useState(0);
 
   //This is basically saying make a variable called array
@@ -49,6 +53,13 @@ function App() {
 
   return (
     <>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SignupForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
