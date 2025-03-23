@@ -6,7 +6,10 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { CircleUserRound } from "lucide-react";
 import { Dialog } from "radix-ui";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignupForm from "./loginpages/signup_form";
+import LoginForm from "./loginpages/loginform";
+import Dashboard from "./loginpages/Usersahboard";import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 
@@ -16,6 +19,7 @@ interface Fruit {
 }
 
 function App() {
+
   const [count, setCount] = useState(0);
 
   //This is basically saying make a variable called array
@@ -47,6 +51,13 @@ function App() {
 
   return (
     <>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SignupForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
       <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<Signup />} />
@@ -69,6 +80,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        {/* This is the radix comment */}
         <Dialog.Root>
           <Dialog.Trigger asChild>
             <button className="Button violet">Edit profile</button>
@@ -118,8 +130,8 @@ function App() {
           </Dialog.Portal>
         </Dialog.Root>
       </div>
-      //icons
-      <CircleUserRound />
+        {/* This is the icon comment */}
+        <CircleUserRound size={18}/>
       <motion.div initial={{ scale: 1 }} whileHover={{ scale: 1.3 }}>
         {/* This is the fruit comment */}
         <h1>Fruit List</h1>
