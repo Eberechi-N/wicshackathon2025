@@ -1,16 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Eye, EyeOff } from "lucide-react";
 import background_image from '../assets/signup_background.jpg';
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+    setError(""); // Clear previous errors
+
+
     try {
       const response = await axios.post("http://localhost:8080/signup", {
         email,
@@ -50,6 +63,7 @@ function Signup() {
             required
           />
 
+          {/* Email */}
           <input
             type="email"
             placeholder="Email"
@@ -59,14 +73,44 @@ function Signup() {
             required
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 border border-gray-300 rounded-md"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+           {/* Password Field */}
+           <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="w-full p-3 border border-gray-300 rounded-md pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span
+              className="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-gray-700"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </span>
+          </div>
+
+          {/* Confirm Password Field (Separate State) */}
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm Password"
+              className="w-full p-3 border border-gray-300 rounded-md pr-10"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <span
+              className="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-gray-700"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </span>
+          </div>
+      
+      {/* Error Message */}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
