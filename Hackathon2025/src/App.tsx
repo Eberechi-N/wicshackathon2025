@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import Transactions from "./transactions";
+// import Transactions from "./transactions";
 import Fake from "./paget";
 import Dashboard from "./loginpages/Usersahboard";
 
@@ -14,7 +14,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         
         {/* Routes that include the dashboard and sidebar */}
-        <Route path="/transactions" element={<Transactions />} />
+        {/* <Route path="/transactions" element={<Transactions />} /> */}
         <Route path="/userdash" element={<Dashboard />} />
         <Route path="/fake" element={<Fake />} />
         

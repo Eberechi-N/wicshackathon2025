@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import { LogOut } from "lucide-react"; // Importing Lucide icon
 
-
 const SUPABASE_URL="https://oatymndotskzyhjtxycu.supabase.co";
 const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9hdHltbmRvdHNrenloanR4eWN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2MjQwMjcsImV4cCI6MjA1ODIwMDAyN30.nbvEpWG29xt_Azxc26OHiVgZD-j_sOj8WcLq2vGEsGg";
 
