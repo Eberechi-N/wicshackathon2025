@@ -7,6 +7,8 @@ const cors = require("cors");
 const pool = require("./database"); // Import the database connection
 //need this for auth database speficially
 
+
+
 const corsOptions = {
     origin: ["http://localhost:5173"],
     credentials: true
@@ -17,13 +19,17 @@ const supabase = createClient(
     process.env.SUPABASE_ANON_KEY
 );
 
+//Import the routes
+
 const incomeRoutes = require("./routes/income_routes"); 
 const expenseRoutes = require("./routes/expense_routes");
+const accountsRoutes = require("./routes/accounts_routes");
 
 app.use(express.json()); 
 app.use(cors(corsOptions));
 app.use("/api/income", incomeRoutes); // Register income routes
 app.use("/api/expenses", expenseRoutes); // Register expense routes
+app.use("/apie/accounts", accountsRoutes); // Register accounts routes
 
 //signup route
 app.post("/signup", async (req, res) => {
